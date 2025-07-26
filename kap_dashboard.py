@@ -8,11 +8,11 @@ from scipy.stats import ttest_ind, f_oneway
 # Title
 st.title("Post-COVID Cardiovascular Health KAP Survey Dashboard")
 
-# File upload
-uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
+# Predefined Google Sheet CSV URL (must be published and accessible to everyone)
+sheet_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLFsHdGKCcxDcv6nGtfwJBywmdRruPaukoe9FeRyZoYne0mcbq2ObTzdE4tk60t-zsIEoZ89OfC0SP/pub?gid=1275260942&single=true&output=csv"  # Replace with your own published CSV URL
 
-if uploaded_file:
-    df = pd.read_csv(uploaded_file)
+try:
+    df = pd.read_csv(sheet_url)
     df.columns = df.columns.str.strip()
 
     # Identify columns
@@ -91,3 +91,6 @@ if uploaded_file:
     fig, ax = plt.subplots(figsize=(6, 4))
     sns.heatmap(corr, annot=True, cmap="coolwarm", vmin=-1, vmax=1, ax=ax)
     st.pyplot(fig)
+
+except Exception as e:
+    st.error(f"Failed to load or process the sheet. Error: {e}")
